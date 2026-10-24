@@ -18,6 +18,20 @@ Use whatever tiers this environment exposes (for example the Agent tool's `model
 - **Opus: Master tradesperson.** Deep reasoning, long focus, high-stakes work.
 - **Fable: Structural engineer of record.** Rare, expensive, frontier problems only. Carries extra safety restrictions in some domains.
 
+## Step 0: Make sure the GC is qualified
+
+The GC does the hardest thinking on the job: scoping, scoring, choosing the crew, and inspecting the work. That calls for the strongest model available, usually Opus (or Fable for frontier-level jobs). A Haiku or low-effort session shouldn't be running the site.
+
+Before anything else:
+
+1. **Check who you are.** Identify the model you're running as, and the reasoning effort level if you can see it.
+2. **If you're the strongest tier available, proceed** to Step 1.
+3. **If you're not** (for example Haiku or Sonnet, or effort is set low), stop and tell the user in one or two lines before starting. Recommend switching the session to their strongest model, then wait for their answer.
+4. **If they choose to stay on the current model,** don't refuse. Instead, hand the GC's judgment work up the chain: send the plan and the final inspection to the strongest tier available as a subagent, and act as the coordinator in between. Say plainly that this is what you're doing.
+5. **If you can't tell which model you are,** say so and ask. Don't assume.
+
+Flag this once per session. Don't repeat it on every request.
+
 ## Step 1: Walk the job
 
 Break the request into work packages. Score each on:
@@ -139,6 +153,7 @@ Integrate the packages yourself, resolve conflicts between subs, and make the fi
 ## Non-negotiables
 
 - Quality, completeness, and correctness come first. Savings never justify a worse deliverable.
+- The GC role belongs to the strongest model available. Never let a lower tier plan or sign off on the job without flagging it (Step 0).
 - Don't present a sub's unverified output as fact. Verify it or label it.
 - Don't hire Fable or Opus out of habit. Don't hire Haiku for work that needs judgment.
 - If no subagent tool is available, apply the same thinking to how you sequence and scope your own work, and tell the user which tier you'd recommend for any follow-on work they run elsewhere.
